@@ -15,7 +15,7 @@ public class Main {
             scanner.nextLine();
             switch (action){
                 case 0:
-                    System.out.println("\nShutting down...");
+                    System.out.println("\nPhone Turned off");
                     quit = true;
                     break;
                 case 1:
@@ -45,10 +45,10 @@ public class Main {
         String phone = scanner.nextLine();
         Contact newContact = Contact.createContact(name,phone);
         if(myphone.addNewContact(newContact)){
-            System.out.println("New contact was added to the phone: \nname:" + name + " \nphone: " + phone);
+            System.out.printf("New contact was added to the phone: \nname: %s \nphone: %s\n", name,phone);
         }
         else{
-            System.out.println(name + " cannot be added to the phone, as " + name + " already exists.");
+            System.out.printf("%s cannot be added to the phone, as %s already exists.\n",name,name);
         }
     }
     public static void updateContact(){
@@ -95,7 +95,7 @@ public class Main {
             System.out.println("Contact not found.");
             return;
         }
-        System.out.println("Name: " + existingContactRecord.getName() + " phone number is " + existingContactRecord.getPhoneNumber());
+        System.out.printf("Name: %s phone number is %s\n", existingContactRecord.getName(),existingContactRecord.getPhoneNumber());
     }
 
     private static void startPhone(){
@@ -103,7 +103,7 @@ public class Main {
     }
     private static void printActions(){
         System.out.println("\nAvailable actions: \n press");
-        System.out.println("0 - to shutdown \n 1 - to print contacts\n 2 - t- add a new contact\n 3 - to update an existing contact\n 4 - to remove an existing contact\n 5 - query if an existing contact exists\n 6 - to print a list of available actions. \n Choose your action: \n");
+        System.out.println("0 - to shutdown \n 1 - to print contacts\n 2 - to add a new contact\n 3 - to update an existing contact\n 4 - to remove an existing contact\n 5 - query if an existing contact exists\n 6 - to print a list of available actions. \n Choose your action: \n");
 
     }
 }

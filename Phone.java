@@ -22,22 +22,22 @@ public class Phone {
     public boolean update(Contact oldContact, Contact newContact){
         int foundPosition = findContact(oldContact);
         if(foundPosition < 0){
-            System.out.println(oldContact.getName() + " was not found.");
+            System.out.printf("%s was not found.\n",oldContact.getName());
             return false;
         }
         this.myContacts.set(foundPosition,newContact);
-        System.out.println(oldContact.getName() + " was replaced with " + newContact.getName());
+        System.out.printf("%s was replaced with %s\n",oldContact.getName(),newContact.getName() );
         return true;
     }
 
     public boolean removeContact(Contact contact){
         int foundPositon = findContact(contact);
         if(foundPositon < 0){
-            System.out.println(contact.getName() + " was not found.");
+            System.out.printf("%s was not found.\n",contact.getName());
             return false;
         }
         this.myContacts.remove(foundPositon);
-        System.out.println(contact.getName() + "was deleted");
+        System.out.printf("%s was deleted\n",contact.getName());
         return true;
     }
 
@@ -73,7 +73,8 @@ public class Phone {
     public void printContacts(){
         System.out.println("Contact List:");
         for(int i = 0; i < this.myContacts.size(); i++){
-            System.out.println((i+1) + ". " + this.myContacts.get(i).getName() + " -> " + this.myContacts.get(i).getPhoneNumber());
+            System.out.printf("%d. %s -> %s\n"  ,(i+1),this.myContacts.get(i).getName(),this.myContacts.get(i).getPhoneNumber());
+
         }
     }
 
