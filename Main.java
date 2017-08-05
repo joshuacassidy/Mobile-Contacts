@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -7,39 +8,47 @@ public class Main {
 
     public static void main(String[] args){
         boolean quit = false;
-        startPhone();
-        printActions();
+        Actions[] listOfActions = new Actions[] {new printActions(), new  printContacts(), new addNewContact(), new updateContact(), new removeContact(),new queryContact()};
+        System.out.println("Phone started.");
+        Actions printActions = selectAction(listOfActions,0);
+        printActions.Action(scanner,myphone);
+        int choice = 0;
         while (!quit){
-            System.out.println("Enter action: (6 to show actions)");
-            int action = scanner.nextInt();
-            scanner.nextLine();
-            switch (action){
-                case 0:
-                    System.out.println("\nPhone Turned off");
+            System.out.println("\nPress 0 to get the list of options.\nSelect an option: ");
+            try{
+                choice = scanner.nextInt();
+                System.out.flush();
+                System.out.print("\033[H\033[2J");
+                Actions doAction = selectAction(listOfActions,choice);
+                doAction.Action(scanner, myphone);
+            }
+                catch (InputMismatchException | ArrayIndexOutOfBoundsException e){
+                    System.out.println(choice != 6 ? "Error invalid input shutting down phone." : "Shutting down phone");
                     quit = true;
-                    break;
-                case 1:
-                    myphone.printContacts();
-                    break;
-                case 2: addNewContact();
-                    break;
-                case 3:
-                    updateContact();
-                    break;
-                case 4:
-                    removeContact();
-                    break;
-                case 5:
-                    queryContact();
-                    break;
-                case 6:
-                    printActions();
-                    break;
+                }
             }
         }
+        public static Actions selectAction(Actions[] action,int selectedAction){
+            return action[selectedAction];
+        }
     }
-    private static void addNewContact(){
+
+interface Actions {
+    void Action(Scanner scanner,Phone myphone);
+}
+
+class printContacts implements Actions {
+
+    public void Action(Scanner scanner, Phone myphone) {
+        myphone.printContacts();
+    }
+}
+
+class addNewContact implements Actions{
+
+    public void Action(Scanner scanner,Phone myphone){
         System.out.println("Enter new contact name: ");
+        scanner.nextLine();
         String name = scanner.nextLine();
         System.out.println("Enter phone number: ");
         String phone = scanner.nextLine();
@@ -51,8 +60,15 @@ public class Main {
             System.out.printf("%s cannot be added to the phone, as %s already exists.\n",name,name);
         }
     }
-    public static void updateContact(){
+
+}
+
+
+class updateContact implements Actions{
+
+    public void Action(Scanner scanner,Phone myphone){
         System.out.println("Enter existing contact name: ");
+        scanner.nextLine();
         String name = scanner.nextLine();
         Contact existingContactRecord = myphone.queryContact(name);
         if(existingContactRecord == null){
@@ -71,39 +87,49 @@ public class Main {
             System.out.println("Error updating contact.");
         }
     }
-    public static void removeContact(){
+}
+
+
+
+class removeContact implements Actions{
+
+    public void Action(Scanner scanner,Phone myphone) {
         System.out.println("Enter existing contact name: ");
+        scanner.nextLine();
         String name = scanner.nextLine();
         Contact existingContactRecord = myphone.queryContact(name);
-        if(existingContactRecord == null){
+        if (existingContactRecord == null) {
             System.out.println("Contact not found.");
             return;
         }
-        if(myphone.removeContact(existingContactRecord)){
+        if (myphone.removeContact(existingContactRecord)) {
             System.out.println("Successfully deleted.");
-        }
-        else{
+        } else {
             System.out.println("Error deleting contact.");
         }
     }
+}
 
-    public static void queryContact(){
+class queryContact implements Actions {
+    public void Action(Scanner scanner,Phone myphone) {
+
         System.out.println("Enter existing contact name: ");
+        scanner.nextLine();
         String name = scanner.nextLine();
         Contact existingContactRecord = myphone.queryContact(name);
-        if(existingContactRecord == null){
+        if (existingContactRecord == null) {
             System.out.println("Contact not found.");
             return;
         }
-        System.out.printf("Name: %s phone number is %s\n", existingContactRecord.getName(),existingContactRecord.getPhoneNumber());
-    }
-
-    private static void startPhone(){
-        System.out.println("Phone started.");
-    }
-    private static void printActions(){
-        System.out.println("\nAvailable actions: \n press");
-        System.out.println("0 - to shutdown \n 1 - to print contacts\n 2 - to add a new contact\n 3 - to update an existing contact\n 4 - to remove an existing contact\n 5 - query if an existing contact exists\n 6 - to print a list of available actions. \n Choose your action: \n");
-
+        System.out.printf("Name: %s phone number is %s\n", existingContactRecord.getName(), existingContactRecord.getPhoneNumber());
     }
 }
+
+class printActions implements Actions{
+
+    public void Action(Scanner scanner,Phone myphone) {
+        System.out.println("\nAvailable actions: \n press");
+        System.out.println("Choose your action: \n 0 - to print available actions \n 1 - to print contacts \n 2 - to add a new contact\n 3 - to update an existing contact\n 4 - to remove an existing contact\n 5 - query if an existing contact exists\n 6 - to shutdown \n ");
+    }
+}
+
