@@ -9,6 +9,8 @@ public class Main {
     public static void main(String[] args){
         boolean quit = false;
         Actions[] listOfActions = new Actions[] {new printActions(), new  printContacts(), new addNewContact(), new updateContact(), new removeContact(),new queryContact()};
+        System.out.flush();
+        System.out.print("\033[H\033[2J");
         System.out.println("Phone started.");
         Actions printActions = selectAction(listOfActions,0);
         printActions.Action(scanner,myphone);
@@ -53,15 +55,9 @@ class addNewContact implements Actions{
         System.out.println("Enter phone number: ");
         String phone = scanner.nextLine();
         Contact newContact = Contact.createContact(name,phone);
-        if(myphone.addNewContact(newContact)){
-            System.out.printf("New contact was added to the phone: \nname: %s \nphone: %s\n", name,phone);
-        }
-        else{
-            System.out.printf("%s cannot be added to the phone, as %s already exists.\n",name,name);
+        System.out.printf(myphone.addNewContact(newContact) ? "New contact was added to the phone: \nname: %s \nphone: %s\n": "%s cannot be added to the phone, as %s already exists.\n",name,name);
         }
     }
-
-}
 
 
 class updateContact implements Actions{
@@ -80,12 +76,7 @@ class updateContact implements Actions{
         System.out.println("Enter phone number: ");
         String newPhone = scanner.nextLine();
         Contact newContact = Contact.createContact(newName,newPhone);
-        if(myphone.update(existingContactRecord,newContact)){
-            System.out.println("Update was successful.");
-        }
-        else{
-            System.out.println("Error updating contact.");
-        }
+        System.out.println(myphone.update(existingContactRecord,newContact) ? "Update was successful." : "Error updating contact.");
     }
 }
 
@@ -102,13 +93,9 @@ class removeContact implements Actions{
             System.out.println("Contact not found.");
             return;
         }
-        if (myphone.removeContact(existingContactRecord)) {
-            System.out.println("Successfully deleted.");
-        } else {
-            System.out.println("Error deleting contact.");
+        System.out.println(myphone.removeContact(existingContactRecord) ? "Successfully deleted." : "Error deleting contact.");
         }
     }
-}
 
 class queryContact implements Actions {
     public void Action(Scanner scanner,Phone myphone) {
